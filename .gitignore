@@ -1,0 +1,68 @@
+## Visual Studio Build Results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleasPublic/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio Environment & User Files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.opendb
+*.db
+*.db-shm
+*.db-wal
+
+## Roslyn / Analysis Caches
+*.cache
+*.swp
+*.lsp
+.index/
+.search/
+
+## NuGet Packages
+*.nupkg
+# The packages folder is usually ignored because they can be restored
+**/packages/*
+!**/packages/build/
+
+## Test Results and Coverage
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+## Common Binary Extensions (Optional but recommended)
+*.exe
+*.dll
+*.pdb
+*.msi
+*.iso
+
+## JetBrains / Resharper (if you use it)
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+## OS specific files
+Thumbs.db
+desktop.ini
+.DS_Store
+
+
+# Ignore all Visual Studio publish profiles
+*.pubxml
+*.pubxml.user
+*.slnx
+*.slnx
