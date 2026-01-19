@@ -22,6 +22,9 @@ namespace PixelPurrfect
         private ScaleTransform _scaleTransform = new();
         private TranslateTransform _translateTransform = new();
 
+        // Supported image extensions
+        private static readonly string[] SupportedExtensions = { ".png", ".jpg", ".jpeg", ".bmp", ".gif", ".tiff", ".tif" };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -54,8 +57,11 @@ namespace PixelPurrfect
                 var dir = Path.GetDirectoryName(path);
                 if (dir != null)
                 {
-                    _folderFiles = Directory.GetFiles(dir, "*.png")
-                        .OrderBy(f => f).ToArray();
+                    // Load all supported image files from the directory
+                    _folderFiles = Directory.GetFiles(dir)
+                        .Where(f => SupportedExtensions.Contains(Path.GetExtension(f).ToLowerInvariant()))
+                        .OrderBy(f => f)
+                        .ToArray();
                     _currentIndex = Array.IndexOf(_folderFiles, path);
                 }
 
@@ -67,8 +73,8 @@ namespace PixelPurrfect
 
         private void ResetImageView()
         {
-            _zoom = 1.0;
-            _scaleTransform.ScaleX = _scaleTransform.ScaleY = 1.0;
+            // Preserve the current zoom level
+            _scaleTransform.ScaleX = _scaleTransform.ScaleY = _zoom;
             _translateTransform.X = _translateTransform.Y = 0;
 
             if (img.Source != null)
@@ -87,8 +93,12 @@ namespace PixelPurrfect
             var pos = e.GetPosition(img);
             var oldZoom = _zoom;
 
-            _zoom += e.Delta > 0 ? 1 : -1;
-            _zoom = Math.Max(1, Math.Min(_zoom, 32));
+            // Use fractional zoom increments for smoother zoom in/out
+            var zoomFactor = e.Delta > 0 ? 1.2 : 1 / 1.2;
+            _zoom *= zoomFactor;
+
+            // Allow zoom from 0.1 (10%) to 32 (3200%)
+            _zoom = Math.Max(0.1, Math.Min(_zoom, 32));
 
             if (oldZoom != _zoom)
             {
@@ -139,8 +149,12 @@ namespace PixelPurrfect
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 var files = (string[]?)e.Data.GetData(DataFormats.FileDrop);
-                if (files != null && files.Length > 0 && files[0].EndsWith(".png", StringComparison.OrdinalIgnoreCase))
-                    LoadImageFromFile(files[0]);
+                if (files != null && files.Length > 0)
+                {
+                    var ext = Path.GetExtension(files[0]).ToLowerInvariant();
+                    if (SupportedExtensions.Contains(ext))
+                        LoadImageFromFile(files[0]);
+                }
             }
         }
 
